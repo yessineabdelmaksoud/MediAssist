@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="32dp">
+
+    <!-- Logo avec animation subtle -->
+    <ImageView
+        android:id="@+id/logoImage"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:src="@drawable/img"
+        android:contentDescription="@string/app_logo"
+        android:scaleType="fitCenter"
+        android:elevation="8dp"
+        android:outlineProvider="background" />
+
+    <!-- Citation avec meilleure typographie -->
+    <TextView
+        android:id="@+id/quoteText"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+        android:lineSpacingExtra="4sp"
+        android:text="@string/health_quote"
+        android:textColor="#1cbcb2"
+        android:textSize="22sp"
+        android:textStyle="italic"
+        android:fontFamily="sans-serif-light"
+        android:letterSpacing="0.03" />
+
+    <!-- Bouton invisible pour l'accessibilité -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/tap_to_continue"
+        android:textColor="#80FFFFFF"
+        android:textSize="14sp"
+        android:visibility="invisible" />
+
+</LinearLayout>

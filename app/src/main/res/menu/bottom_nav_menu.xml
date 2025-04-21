@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/house"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/nav_meds"
+        android:icon="@drawable/medsic"
+        android:title="Meds" />
+
+    <item
+        android:id="@+id/nav_appts"
+        android:icon="@drawable/appointments"
+        android:title="Appts" />
+
+    <item
+        android:id="@+id/nav_sched"
+        android:icon="@drawable/calendar"
+        android:title="Sched" />
+
+    <item
+        android:id="@+id/nav_contacts"
+        android:icon="@drawable/telephone"
+        android:title="Contacts" />
+</menu>

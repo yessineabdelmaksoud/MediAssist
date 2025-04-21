@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="1dp"
+    android:background="@drawable/background">
+
+    <!-- Logo -->
+
+    <!-- ViewPager2 -->
+    <ImageView
+        android:id="@+id/logoImage"
+        android:layout_width="157dp"
+        android:layout_height="149dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="25dp"
+        android:contentDescription="App Logo"
+        android:padding="1dp"
+        android:src="@drawable/img" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="410dp"
+        android:layout_height="291dp"
+        android:layout_above="@+id/dotsLayout"
+        android:layout_below="@id/logoImage"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="208dp"
+        android:layout_marginBottom="46dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:id="@+id/dotsLayout"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/navigationButtons"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Navigation Buttons -->
+    <LinearLayout
+        android:id="@+id/navigationButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="8dp"
+        android:layout_marginBottom="16dp">
+
+        <Button
+            android:id="@+id/backButton"
+            android:layout_width="0dp"
+            android:layout_weight="0.8"
+            android:layout_height="wrap_content"
+            android:text="Back"
+            android:textSize="16sp"
+            android:padding="12dp"
+            android:textColor="@color/white" />
+        <View
+            android:layout_width="16dp"
+            android:layout_height="0dp" /> <!-- Spacer view -->
+
+        <Button
+            android:id="@+id/nextButton"
+            android:layout_width="0dp"
+            android:layout_weight="0.8"
+            android:layout_height="wrap_content"
+            android:text="Next"
+            android:textSize="16sp"
+            android:padding="12dp"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/finishButton"
+            android:layout_width="0dp"
+            android:layout_weight="0.8"
+            android:layout_height="wrap_content"
+            android:text="Finish"
+            android:textSize="16sp"
+            android:padding="12dp"
+            android:textColor="@color/white"
+            android:visibility="gone" />
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">application project</string>
+    <string name="app_logo">App Logo</string>
+    <string name="health_quote">« La santé est le véritable trésor. »</string>
+    <string name="tap_to_continue">Touchez pour continuer</string>
+
+</resources>
