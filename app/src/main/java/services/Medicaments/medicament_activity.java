@@ -1,6 +1,8 @@
 package services.Medicaments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,6 +39,7 @@ public class medicament_activity extends AppCompatActivity {
     private EditText searchEditText;
     private MaterialButton addButton;
     private ImageButton darkModeToggle;
+    private long userId; // Ajout de l'ID de l'utilisateur
 
     private static final int REQUEST_ADD_MEDICAMENT = 1;
     private static final int REQUEST_EDIT_MEDICAMENT = 2;
@@ -46,6 +49,9 @@ public class medicament_activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medicament);
         requestNotificationPermission();
+
+        // Obtenir l'ID de l'utilisateur connecté
+        userId = getCurrentUserId();
 
         // Initialiser la base de données
         medicamentDAO = new MedicamentDAO(this);
@@ -67,12 +73,10 @@ public class medicament_activity extends AppCompatActivity {
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 adapter.getFilter().filter(s);
             }
-
             @Override
             public void afterTextChanged(Editable s) {}
         });
@@ -93,7 +97,7 @@ public class medicament_activity extends AppCompatActivity {
     }
 
     private void loadMedicaments() {
-        List<Medicament> medicaments = medicamentDAO.getAllMedicaments();
+        List<Medicament> medicaments = medicamentDAO.getAllMedicaments(userId); // Passer l'ID de l'utilisateur
         adapter = new MedicamentAdapter(this, medicaments);
         recyclerView.setAdapter(adapter);
 
@@ -172,7 +176,6 @@ public class medicament_activity extends AppCompatActivity {
     private void setupBottomNavigation() {
         BottomNavigationView nav = findViewById(R.id.bottom_navigation);
         nav.setSelectedItemId(R.id.nav_meds); // Sélectionner l'item actif
-
         nav.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
 
@@ -205,5 +208,12 @@ public class medicament_activity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        medicamentDAO.close();
+    }
+
+    // Méthode pour obtenir l'ID de l'utilisateur connecté
+    private long getCurrentUserId() {
+        SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+        return sharedPreferences.getLong("user_id", -1); // Retourne -1 si l'ID de l'utilisateur n'est pas trouvé
     }
 }

@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class AppDatabaseHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "health_app.db";
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2; // Incrémentez la version de la base de données
 
     // Table Users (Login info)
     public static final String TABLE_USERS = "users";
@@ -30,6 +30,27 @@ public class AppDatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_ADDRESS = "address";
     public static final String COLUMN_MEDICAL_CONDITIONS = "medical_conditions";
     public static final String COLUMN_PROFILE_IMAGE = "profile_image";
+
+    // Table Medicaments
+    public static final String TABLE_MEDICAMENTS = "medicaments";
+    public static final String COLUMN_MEDICAMENT_ID = "_id"; // Correction ici
+    public static final String COLUMN_MEDICAMENT_USER_ID = "user_id"; // Foreign key to users table
+    public static final String COLUMN_NOM = "nom";
+    public static final String COLUMN_POSOLOGIE = "posologie";
+    public static final String COLUMN_FREQUENCE = "frequence";
+    public static final String COLUMN_REMARQUE = "remarque";
+    public static final String COLUMN_IMAGE_PATH = "image_path";
+
+    // Table Alarmes
+    public static final String TABLE_ALARMES = "alarmes";
+    public static final String COLUMN_ALARM_ID = "_id";
+    public static final String COLUMN_MEDICAMENT_ID_ALARM = "medicament_id"; // Renamed to avoid conflict
+    public static final String COLUMN_HEURE = "heure";
+
+    // Table Jours
+    public static final String TABLE_JOURS = "jours";
+    public static final String COLUMN_JOUR_ID = "_id";
+    public static final String COLUMN_JOUR = "jour";
 
     private static final String SQL_CREATE_USERS_TABLE =
             "CREATE TABLE " + TABLE_USERS + " (" +
@@ -55,11 +76,48 @@ public class AppDatabaseHelper extends SQLiteOpenHelper {
                     "FOREIGN KEY(" + COLUMN_USER_ID + ") REFERENCES " +
                     TABLE_USERS + "(" + COLUMN_ID + "))";
 
+    private static final String SQL_CREATE_MEDICAMENTS_TABLE =
+            "CREATE TABLE " + TABLE_MEDICAMENTS + " (" +
+                    COLUMN_MEDICAMENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COLUMN_MEDICAMENT_USER_ID + " INTEGER NOT NULL, " +
+                    COLUMN_NOM + " TEXT NOT NULL, " +
+                    COLUMN_POSOLOGIE + " TEXT NOT NULL, " +
+                    COLUMN_FREQUENCE + " TEXT NOT NULL, " +
+                    COLUMN_REMARQUE + " TEXT, " +
+                    COLUMN_IMAGE_PATH + " TEXT, " +
+                    "FOREIGN KEY(" + COLUMN_MEDICAMENT_USER_ID + ") REFERENCES " +
+                    TABLE_USERS + "(" + COLUMN_ID + ") ON DELETE CASCADE);";
+
+    private static final String SQL_CREATE_ALARMES_TABLE =
+            "CREATE TABLE " + TABLE_ALARMES + " (" +
+                    COLUMN_ALARM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COLUMN_MEDICAMENT_ID_ALARM + " INTEGER NOT NULL, " +
+                    COLUMN_HEURE + " TEXT NOT NULL, " +
+                    "FOREIGN KEY (" + COLUMN_MEDICAMENT_ID_ALARM + ") REFERENCES " +
+                    TABLE_MEDICAMENTS + "(" + COLUMN_MEDICAMENT_ID + ") ON DELETE CASCADE);";
+
+    private static final String SQL_CREATE_JOURS_TABLE =
+            "CREATE TABLE " + TABLE_JOURS + " (" +
+                    COLUMN_JOUR_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COLUMN_MEDICAMENT_ID + " INTEGER NOT NULL, " +
+                    COLUMN_JOUR + " TEXT NOT NULL, " +
+                    "FOREIGN KEY (" + COLUMN_MEDICAMENT_ID + ") REFERENCES " +
+                    TABLE_MEDICAMENTS + "(" + COLUMN_MEDICAMENT_ID + ") ON DELETE CASCADE);";
+
     private static final String SQL_DELETE_USERS =
             "DROP TABLE IF EXISTS " + TABLE_USERS;
 
     private static final String SQL_DELETE_PROFILES =
             "DROP TABLE IF EXISTS " + TABLE_PROFILES;
+
+    private static final String SQL_DELETE_MEDICAMENTS =
+            "DROP TABLE IF EXISTS " + TABLE_MEDICAMENTS;
+
+    private static final String SQL_DELETE_ALARMES =
+            "DROP TABLE IF EXISTS " + TABLE_ALARMES;
+
+    private static final String SQL_DELETE_JOURS =
+            "DROP TABLE IF EXISTS " + TABLE_JOURS;
 
     public AppDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -69,19 +127,24 @@ public class AppDatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_USERS_TABLE);
         db.execSQL(SQL_CREATE_PROFILES_TABLE);
+        db.execSQL(SQL_CREATE_MEDICAMENTS_TABLE);
+        db.execSQL(SQL_CREATE_ALARMES_TABLE);
+        db.execSQL(SQL_CREATE_JOURS_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Supprimer d'abord la table profiles car elle a une clé étrangère
+        db.execSQL(SQL_DELETE_JOURS);
+        db.execSQL(SQL_DELETE_ALARMES);
+        db.execSQL(SQL_DELETE_MEDICAMENTS);
         db.execSQL(SQL_DELETE_PROFILES);
         db.execSQL(SQL_DELETE_USERS);
         onCreate(db);
     }
 
-    // Méthode de migration des données depuis les anciennes bases
-    public void migrateData(Context context, SQLiteDatabase newDb) {
-        // Migration depuis les anciennes bases de données
-        // (Cette méthode sera implémentée dans une classe séparée)
+    @Override
+    public void onConfigure(SQLiteDatabase db) {
+        super.onConfigure(db);
+        db.setForeignKeyConstraintsEnabled(true);
     }
-} 
+}
