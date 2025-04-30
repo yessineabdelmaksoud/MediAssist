@@ -8,37 +8,34 @@
     android:padding="1dp"
     android:background="@drawable/background">
 
-    <!-- En-tête avec logo et nom -->
+    <!-- En-tête avec titre -->
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:padding="16dp">
+        android:padding="8dp"
+        android:background="@color/white">
 
-        <ImageView
-            android:id="@+id/appLogo"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/img" />
-
-        <TextView
-            android:id="@+id/appTitle"
+        <ImageButton
+            android:id="@+id/backButton2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="MediAssist"
-            android:textSize="24sp"
+            android:src="@drawable/ic_back"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
+            android:contentDescription="Retour" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ajouter une prescription"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_marginStart="10dp"/>
+            android:layout_marginStart="16dp"/>
     </LinearLayout>
 
-    <!-- Ligne de séparation -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#CCCCCC"
-        android:layout_marginVertical="8dp"
-        android:padding="16dp"/>
+
 
     <!-- Contenu principal -->
     <ScrollView
@@ -156,15 +153,6 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- Menu de navigation en bas -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/white"
-        app:itemIconTint="@color/selector_nav_item"
-        app:itemTextColor="@color/selector_nav_item"
-        app:menu="@menu/bottom_nav_menu" />
+
 
 </LinearLayout>

@@ -164,7 +164,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
         userProfile = profileDAO.getProfileByUsername(username);
 
         if (userProfile == null) {
-            userProfile = new UserProfile(username);
+            userProfile = new UserProfile();
             profileDAO.saveProfile(userProfile);
         }
 

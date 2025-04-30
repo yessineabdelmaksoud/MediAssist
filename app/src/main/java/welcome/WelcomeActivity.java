@@ -1,6 +1,7 @@
 package welcome;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -11,11 +12,13 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.applicationproject.HomeActivity;
 import com.example.applicationproject.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import login.LoginActivity;
 import login.SignUpActivity;
 
 public class WelcomeActivity extends AppCompatActivity {
@@ -28,6 +31,15 @@ public class WelcomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+        boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
+
+        if (isLoggedIn) {
+            Intent intent = new Intent(WelcomeActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+            return; // Important pour arrêter l'exécution ici
+        }
         setContentView(R.layout.activity_welcome);
 
         viewPager = findViewById(R.id.viewPager);

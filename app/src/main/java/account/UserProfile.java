@@ -2,7 +2,8 @@ package account;
 
 public class UserProfile {
     private int id;
-    private String username;
+    private int userId;  // ID référençant l'utilisateur dans la table users
+    private String username;  // Gardé pour compatibilité
     private int age;
     private String gender;
     private String bloodType;
@@ -14,20 +15,43 @@ public class UserProfile {
     private String profileImagePath;
 
     public UserProfile() {
-        // Default constructor
+        // Empty constructor
     }
 
-    public UserProfile(String username) {
+    // Constructeur complet
+    public UserProfile(int id, int userId, String username, int age, String gender,
+                       String bloodType, float weight, float height,
+                       String phone, String address, String medicalConditions,
+                       String profileImagePath) {
+        this.id = id;
+        this.userId = userId;
         this.username = username;
+        this.age = age;
+        this.gender = gender;
+        this.bloodType = bloodType;
+        this.weight = weight;
+        this.height = height;
+        this.phone = phone;
+        this.address = address;
+        this.medicalConditions = medicalConditions;
+        this.profileImagePath = profileImagePath;
     }
 
-    // Getters and setters
+    // Getters and Setters
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {

@@ -30,6 +30,19 @@
             android:textSize="24sp"
             android:textStyle="bold"
             android:layout_marginStart="10dp"/>
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/accountIcon"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="end"
+            android:contentDescription="Account Icon"
+            android:src="@drawable/user" />
     </LinearLayout>
 
     <!-- Ligne de séparation -->

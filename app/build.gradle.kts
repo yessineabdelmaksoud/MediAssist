@@ -42,7 +42,9 @@ dependencies {
     // Material Components
     implementation("com.google.android.material:material:1.9.0")
     implementation("androidx.cardview:cardview:1.0.0")
-    implementation("com.google.android.material:material:1.9.0")
+    implementation ("de.hdodenhof:circleimageview:3.1.0")
+    implementation ("com.github.chrisbanes:PhotoView:2.3.0")
+    implementation(libs.recyclerview)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

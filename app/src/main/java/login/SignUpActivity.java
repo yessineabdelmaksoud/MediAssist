@@ -14,12 +14,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.applicationproject.R;
 
+import database.AppDatabaseHelper;
+
 public class SignUpActivity extends AppCompatActivity {
 
     private EditText nameEditText, emailEditText, passwordEditText, usernameEditText;
     private Button signupButton;
     private TextView loginText;
-    private DatabaseHelper dbHelper;
+    private AppDatabaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +35,7 @@ public class SignUpActivity extends AppCompatActivity {
         signupButton = findViewById(R.id.signupButton);
         loginText = findViewById(R.id.loginText);
 
-        dbHelper = new DatabaseHelper(this);
+        dbHelper = new AppDatabaseHelper(this);
 
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,13 +50,18 @@ public class SignUpActivity extends AppCompatActivity {
                 } else {
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
                     ContentValues values = new ContentValues();
-                    values.put(DatabaseHelper.COLUMN_NAME, name);
-                    values.put(DatabaseHelper.COLUMN_EMAIL, email);
-                    values.put(DatabaseHelper.COLUMN_PASSWORD, password);
-                    values.put(DatabaseHelper.COLUMN_USERNAME, username);
+                    values.put(AppDatabaseHelper.COLUMN_NAME, name);
+                    values.put(AppDatabaseHelper.COLUMN_EMAIL, email);
+                    values.put(AppDatabaseHelper.COLUMN_PASSWORD, password);
+                    values.put(AppDatabaseHelper.COLUMN_USERNAME, username);
 
-                    long newRowId = db.insert(DatabaseHelper.TABLE_USERS, null, values);
+                    long newRowId = db.insert(AppDatabaseHelper.TABLE_USERS, null, values);
                     if (newRowId != -1) {
+                        // Créer automatiquement un profil vide pour le nouvel utilisateur
+                        ContentValues profileValues = new ContentValues();
+                        profileValues.put(AppDatabaseHelper.COLUMN_USER_ID, newRowId);
+                        db.insert(AppDatabaseHelper.TABLE_PROFILES, null, profileValues);
+
                         Toast.makeText(SignUpActivity.this, "Sign Up Successful", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
                         startActivity(intent);

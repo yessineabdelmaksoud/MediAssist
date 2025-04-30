@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
@@ -26,6 +27,9 @@ public class ProfileActivity extends AppCompatActivity {
     private ProfileDAO profileDAO;
     private UserProfile userProfile;
     private String username;
+
+    private int userId = -1;
+
     private static final String PREFS_NAME = "LoginPrefs";
 
     @Override
@@ -49,7 +53,12 @@ public class ProfileActivity extends AppCompatActivity {
 
         // Get username from shared preferences
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        username = settings.getString("username", "");
+        // Récupérer le nom d'utilisateur depuis l'intent
+        Intent intent = getIntent();
+        username = intent.getStringExtra("username");
+        if (intent.hasExtra("userId")) {
+            userId = intent.getIntExtra("userId", -1);
+        }
 
         // Initialize database access
         profileDAO = new ProfileDAO(this);
@@ -62,7 +71,7 @@ public class ProfileActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                saveUserProfile();
             }
         });
 
@@ -82,13 +91,6 @@ public class ProfileActivity extends AppCompatActivity {
         // Reload user profile data each time activity resumes
         loadUserProfile();
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        profileDAO.close();
-    }
-
     private void loadUserProfile() {
         // Get user profile from database
         userProfile = profileDAO.getProfileByUsername(username);
@@ -162,9 +164,77 @@ public class ProfileActivity extends AppCompatActivity {
             }
         } else {
             // Create new profile with just the username if it doesn't exist
-            userProfile = new UserProfile(username);
+            userProfile = new UserProfile();
             profileDAO.saveProfile(userProfile);
             usernameValue.setText(username);
+            if (userId != -1) {
+                userProfile.setUserId(userId);
+            }
         }
+    }
+    private void saveUserProfile() {
+        if (userProfile == null) {
+            userProfile = new UserProfile();
+        }
+
+        // Mettre à jour les informations du profil
+        userProfile.setUsername(username);
+
+        if (userId != -1) {
+            userProfile.setUserId(userId);
+        }
+
+        String ageText = ageValue.getText().toString();
+        if (!ageText.isEmpty()) {
+            try {
+                userProfile.setAge(Integer.parseInt(ageText));
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, "Âge invalide", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+        userProfile.setGender(genderValue.getText().toString());
+        userProfile.setBloodType(bloodTypeValue.getText().toString());
+
+        String weightText = weightValue.getText().toString();
+        if (!weightText.isEmpty()) {
+            try {
+                userProfile.setWeight(Float.parseFloat(weightText));
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, "Poids invalide", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+        String heightText = heightValue.getText().toString();
+        if (!heightText.isEmpty()) {
+            try {
+                userProfile.setHeight(Float.parseFloat(heightText));
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, "Taille invalide", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+        userProfile.setPhone(phoneValue.getText().toString());
+        userProfile.setAddress(addressValue.getText().toString());
+        userProfile.setMedicalConditions(medicalConditionsValue.getText().toString());
+
+        // Sauvegarder le profil
+        long result = profileDAO.saveProfile(userProfile);
+
+        if (result != -1) {
+            Toast.makeText(this, "Profil enregistré avec succès", Toast.LENGTH_SHORT).show();
+            finish();
+        } else {
+            Toast.makeText(this, "Erreur lors de l'enregistrement du profil", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        profileDAO.close();
     }
 }

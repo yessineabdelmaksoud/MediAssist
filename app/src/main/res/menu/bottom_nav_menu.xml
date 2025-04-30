@@ -13,16 +13,18 @@
 
     <item
         android:id="@+id/nav_appts"
-        android:icon="@drawable/appointments"
+        android:icon="@drawable/ic_appointments"
         android:title="Appts" />
 
+
     <item
-        android:id="@+id/nav_sched"
-        android:icon="@drawable/calendar"
-        android:title="Sched" />
+        android:id="@+id/nav_presc"
+        android:icon="@drawable/ic_prescription"
+        android:title="prescription" />
 
     <item
         android:id="@+id/nav_contacts"
         android:icon="@drawable/telephone"
         android:title="Contacts" />
+
 </menu>
