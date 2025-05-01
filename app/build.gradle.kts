@@ -25,6 +25,9 @@ android {
             )
         }
     }
+    buildFeatures {
+        viewBinding = true
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -45,7 +48,19 @@ dependencies {
     implementation ("de.hdodenhof:circleimageview:3.1.0")
     implementation ("com.github.chrisbanes:PhotoView:2.3.0")
     implementation(libs.recyclerview)
+    implementation(libs.foundation.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    implementation ("com.squareup.okhttp3:okhttp:4.10.0")
+
+// Material Design
+    implementation ("com.google.android.material:material:1.9.0")
+
+// RecyclerView
+    implementation ("androidx.recyclerview:recyclerview:1.3.0")
+
+// ConstraintLayout
+    implementation ("androidx.constraintlayout:constraintlayout:2.1.4")
 }

@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <!-- Pour les notifications -->
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -112,7 +113,12 @@
         <activity android:name="services.Medicaments.AddMedicamentActivity"/>
         <activity android:name="services.Medicaments.medicament_activity"/>
         <receiver android:name="services.Medicaments.AlarmReceiver" android:exported="false"/>
-
+        <!-- Activité du chatbot -->
+        <activity
+            android:name=".chatbot.ChatbotActivity"
+            android:exported="false"
+            android:label="Assistant virtuel"
+            android:windowSoftInputMode="adjustResize" />
 
 
     </application>

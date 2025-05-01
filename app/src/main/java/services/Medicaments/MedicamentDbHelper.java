@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class MedicamentDbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "medicaments.db";
-    private static final int DATABASE_VERSION = 2; // Incrémentez la version de la base de données
+    private static final int DATABASE_VERSION = 1;
 
     // Table name
     public static final String TABLE_MEDICAMENTS = "medicaments";
@@ -23,7 +23,6 @@ public class MedicamentDbHelper extends SQLiteOpenHelper {
     public static final String COLUMN_FREQUENCE = "frequence";
     public static final String COLUMN_REMARQUE = "remarque";
     public static final String COLUMN_IMAGE_PATH = "image_path";
-    public static final String COLUMN_USER_ID = "user_id"; // Ajout de la colonne user_id
 
     // Alarmes table columns
     public static final String COLUMN_MEDICAMENT_ID = "medicament_id";
@@ -36,7 +35,6 @@ public class MedicamentDbHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_MEDICAMENTS =
             "CREATE TABLE " + TABLE_MEDICAMENTS + " (" +
                     COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    COLUMN_USER_ID + " INTEGER NOT NULL, " + // Ajout de la colonne user_id
                     COLUMN_NOM + " TEXT NOT NULL, " +
                     COLUMN_POSOLOGIE + " TEXT NOT NULL, " +
                     COLUMN_FREQUENCE + " TEXT NOT NULL, " +

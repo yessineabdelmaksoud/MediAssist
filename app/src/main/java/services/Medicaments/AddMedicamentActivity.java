@@ -2,9 +2,7 @@ package services.Medicaments;
 
 import android.app.Activity;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -61,7 +59,6 @@ public class AddMedicamentActivity extends AppCompatActivity {
     private long medicamentId = -1;
     private MedicamentDAO medicamentDAO;
     private Medicament currentMedicament;
-    private long userId; // Ajout de l'ID de l'utilisateur
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_GALLERY_IMAGE = 2;
@@ -76,9 +73,6 @@ public class AddMedicamentActivity extends AppCompatActivity {
         // Initialiser la base de données
         medicamentDAO = new MedicamentDAO(this);
         medicamentDAO.open();
-
-        // Obtenir l'ID de l'utilisateur connecté
-        userId = getCurrentUserId(); // Méthode pour obtenir l'ID de l'utilisateur connecté
 
         // Trouver les vues
         initializeViews();
@@ -414,8 +408,8 @@ public class AddMedicamentActivity extends AppCompatActivity {
             medicament.setJours(jours);
             medicament.setHeures(heuresList);
 
-            // Insérer dans la base de données avec l'ID de l'utilisateur
-            long id = medicamentDAO.createMedicament(medicament, userId);
+            // Insérer dans la base de données
+            long id = medicamentDAO.createMedicament(medicament);
             medicament.setId(id);
         }
 
@@ -489,11 +483,4 @@ public class AddMedicamentActivity extends AppCompatActivity {
         super.onPause();
         medicamentDAO.close();
     }
-
-    // Méthode pour obtenir l'ID de l'utilisateur connecté
-    private long getCurrentUserId() {
-        SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
-        return sharedPreferences.getLong("user_id", -1); // Retourne -1 si l'ID de l'utilisateur n'est pas trouvé
-    }
-
 }

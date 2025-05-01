@@ -8,22 +8,20 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import database.AppDatabaseHelper;
-
 public class MedicamentDAO {
     private SQLiteDatabase database;
-    private AppDatabaseHelper dbHelper;
+    private MedicamentDbHelper dbHelper;
     private String[] allColumnsMedicament = {
-            AppDatabaseHelper.COLUMN_MEDICAMENT_ID,
-            AppDatabaseHelper.COLUMN_NOM,
-            AppDatabaseHelper.COLUMN_POSOLOGIE,
-            AppDatabaseHelper.COLUMN_FREQUENCE,
-            AppDatabaseHelper.COLUMN_REMARQUE,
-            AppDatabaseHelper.COLUMN_IMAGE_PATH
+            MedicamentDbHelper.COLUMN_ID,
+            MedicamentDbHelper.COLUMN_NOM,
+            MedicamentDbHelper.COLUMN_POSOLOGIE,
+            MedicamentDbHelper.COLUMN_FREQUENCE,
+            MedicamentDbHelper.COLUMN_REMARQUE,
+            MedicamentDbHelper.COLUMN_IMAGE_PATH
     };
 
     public MedicamentDAO(Context context) {
-        dbHelper = new AppDatabaseHelper(context);
+        dbHelper = new MedicamentDbHelper(context);
     }
 
     public void open() {
@@ -35,31 +33,30 @@ public class MedicamentDAO {
     }
 
     // Insertion d'un médicament avec ses heures et jours
-    public long createMedicament(Medicament medicament, long userId) {
+    public long createMedicament(Medicament medicament) {
         ContentValues values = new ContentValues();
-        values.put(AppDatabaseHelper.COLUMN_MEDICAMENT_USER_ID, userId);
-        values.put(AppDatabaseHelper.COLUMN_NOM, medicament.getNom());
-        values.put(AppDatabaseHelper.COLUMN_POSOLOGIE, medicament.getPosologie());
-        values.put(AppDatabaseHelper.COLUMN_FREQUENCE, medicament.getFrequence());
-        values.put(AppDatabaseHelper.COLUMN_REMARQUE, medicament.getRemarque());
-        values.put(AppDatabaseHelper.COLUMN_IMAGE_PATH, medicament.getImagePath());
+        values.put(MedicamentDbHelper.COLUMN_NOM, medicament.getNom());
+        values.put(MedicamentDbHelper.COLUMN_POSOLOGIE, medicament.getPosologie());
+        values.put(MedicamentDbHelper.COLUMN_FREQUENCE, medicament.getFrequence());
+        values.put(MedicamentDbHelper.COLUMN_REMARQUE, medicament.getRemarque());
+        values.put(MedicamentDbHelper.COLUMN_IMAGE_PATH, medicament.getImagePath());
 
-        long medicamentId = database.insert(AppDatabaseHelper.TABLE_MEDICAMENTS, null, values);
+        long medicamentId = database.insert(MedicamentDbHelper.TABLE_MEDICAMENTS, null, values);
 
         // Insérer les heures
         for (String heure : medicament.getHeures()) {
             ContentValues heureValues = new ContentValues();
-            heureValues.put(AppDatabaseHelper.COLUMN_MEDICAMENT_ID, medicamentId);
-            heureValues.put(AppDatabaseHelper.COLUMN_HEURE, heure);
-            database.insert(AppDatabaseHelper.TABLE_ALARMES, null, heureValues);
+            heureValues.put(MedicamentDbHelper.COLUMN_MEDICAMENT_ID, medicamentId);
+            heureValues.put(MedicamentDbHelper.COLUMN_HEURE, heure);
+            database.insert(MedicamentDbHelper.TABLE_ALARMES, null, heureValues);
         }
 
         // Insérer les jours
         for (String jour : medicament.getJours()) {
             ContentValues jourValues = new ContentValues();
-            jourValues.put(AppDatabaseHelper.COLUMN_MEDICAMENT_ID, medicamentId);
-            jourValues.put(AppDatabaseHelper.COLUMN_JOUR, jour);
-            database.insert(AppDatabaseHelper.TABLE_JOURS, null, jourValues);
+            jourValues.put(MedicamentDbHelper.COLUMN_MEDICAMENT_ID, medicamentId);
+            jourValues.put(MedicamentDbHelper.COLUMN_JOUR, jour);
+            database.insert(MedicamentDbHelper.TABLE_JOURS, null, jourValues);
         }
 
         return medicamentId;
@@ -68,61 +65,61 @@ public class MedicamentDAO {
     // Mise à jour d'un médicament
     public int updateMedicament(Medicament medicament) {
         ContentValues values = new ContentValues();
-        values.put(AppDatabaseHelper.COLUMN_NOM, medicament.getNom());
-        values.put(AppDatabaseHelper.COLUMN_POSOLOGIE, medicament.getPosologie());
-        values.put(AppDatabaseHelper.COLUMN_FREQUENCE, medicament.getFrequence());
-        values.put(AppDatabaseHelper.COLUMN_REMARQUE, medicament.getRemarque());
-        values.put(AppDatabaseHelper.COLUMN_IMAGE_PATH, medicament.getImagePath());
+        values.put(MedicamentDbHelper.COLUMN_NOM, medicament.getNom());
+        values.put(MedicamentDbHelper.COLUMN_POSOLOGIE, medicament.getPosologie());
+        values.put(MedicamentDbHelper.COLUMN_FREQUENCE, medicament.getFrequence());
+        values.put(MedicamentDbHelper.COLUMN_REMARQUE, medicament.getRemarque());
+        values.put(MedicamentDbHelper.COLUMN_IMAGE_PATH, medicament.getImagePath());
 
         // Supprimer les anciennes heures et jours
-        database.delete(AppDatabaseHelper.TABLE_ALARMES,
-                AppDatabaseHelper.COLUMN_MEDICAMENT_ID + " = ?",
+        database.delete(MedicamentDbHelper.TABLE_ALARMES,
+                MedicamentDbHelper.COLUMN_MEDICAMENT_ID + " = ?",
                 new String[]{String.valueOf(medicament.getId())});
 
-        database.delete(AppDatabaseHelper.TABLE_JOURS,
-                AppDatabaseHelper.COLUMN_MEDICAMENT_ID + " = ?",
+        database.delete(MedicamentDbHelper.TABLE_JOURS,
+                MedicamentDbHelper.COLUMN_MEDICAMENT_ID + " = ?",
                 new String[]{String.valueOf(medicament.getId())});
 
         // Insérer les nouvelles heures
         for (String heure : medicament.getHeures()) {
             ContentValues heureValues = new ContentValues();
-            heureValues.put(AppDatabaseHelper.COLUMN_MEDICAMENT_ID, medicament.getId());
-            heureValues.put(AppDatabaseHelper.COLUMN_HEURE, heure);
-            database.insert(AppDatabaseHelper.TABLE_ALARMES, null, heureValues);
+            heureValues.put(MedicamentDbHelper.COLUMN_MEDICAMENT_ID, medicament.getId());
+            heureValues.put(MedicamentDbHelper.COLUMN_HEURE, heure);
+            database.insert(MedicamentDbHelper.TABLE_ALARMES, null, heureValues);
         }
 
         // Insérer les nouveaux jours
         for (String jour : medicament.getJours()) {
             ContentValues jourValues = new ContentValues();
-            jourValues.put(AppDatabaseHelper.COLUMN_MEDICAMENT_ID, medicament.getId());
-            jourValues.put(AppDatabaseHelper.COLUMN_JOUR, jour);
-            database.insert(AppDatabaseHelper.TABLE_JOURS, null, jourValues);
+            jourValues.put(MedicamentDbHelper.COLUMN_MEDICAMENT_ID, medicament.getId());
+            jourValues.put(MedicamentDbHelper.COLUMN_JOUR, jour);
+            database.insert(MedicamentDbHelper.TABLE_JOURS, null, jourValues);
         }
 
-        return database.update(AppDatabaseHelper.TABLE_MEDICAMENTS, values,
-                AppDatabaseHelper.COLUMN_MEDICAMENT_ID + " = ?",
+        return database.update(MedicamentDbHelper.TABLE_MEDICAMENTS, values,
+                MedicamentDbHelper.COLUMN_ID + " = ?",
                 new String[]{String.valueOf(medicament.getId())});
     }
 
     // Suppression d'un médicament
     public void deleteMedicament(long id) {
-        database.delete(AppDatabaseHelper.TABLE_JOURS,
-                AppDatabaseHelper.COLUMN_MEDICAMENT_ID + " = ?",
+        database.delete(MedicamentDbHelper.TABLE_JOURS,
+                MedicamentDbHelper.COLUMN_MEDICAMENT_ID + " = ?",
                 new String[]{String.valueOf(id)});
 
-        database.delete(AppDatabaseHelper.TABLE_ALARMES,
-                AppDatabaseHelper.COLUMN_MEDICAMENT_ID + " = ?",
+        database.delete(MedicamentDbHelper.TABLE_ALARMES,
+                MedicamentDbHelper.COLUMN_MEDICAMENT_ID + " = ?",
                 new String[]{String.valueOf(id)});
 
-        database.delete(AppDatabaseHelper.TABLE_MEDICAMENTS,
-                AppDatabaseHelper.COLUMN_MEDICAMENT_ID + " = ?",
+        database.delete(MedicamentDbHelper.TABLE_MEDICAMENTS,
+                MedicamentDbHelper.COLUMN_ID + " = ?",
                 new String[]{String.valueOf(id)});
     }
 
     // Obtenir un médicament par ID
     public Medicament getMedicamentById(long id) {
-        Cursor cursor = database.query(AppDatabaseHelper.TABLE_MEDICAMENTS, allColumnsMedicament,
-                AppDatabaseHelper.COLUMN_MEDICAMENT_ID + " = ?",
+        Cursor cursor = database.query(MedicamentDbHelper.TABLE_MEDICAMENTS, allColumnsMedicament,
+                MedicamentDbHelper.COLUMN_ID + " = ?",
                 new String[]{String.valueOf(id)}, null, null, null);
 
         if (cursor != null) {
@@ -143,14 +140,13 @@ public class MedicamentDAO {
         return medicament;
     }
 
-    // Obtenir tous les médicaments pour un utilisateur donné
-    public List<Medicament> getAllMedicaments(long userId) {
+    // Obtenir tous les médicaments
+    public List<Medicament> getAllMedicaments() {
         List<Medicament> medicaments = new ArrayList<>();
 
-        Cursor cursor = database.query(AppDatabaseHelper.TABLE_MEDICAMENTS,
-                allColumnsMedicament, AppDatabaseHelper.COLUMN_MEDICAMENT_USER_ID + " = ?",
-                new String[]{String.valueOf(userId)}, null, null,
-                AppDatabaseHelper.COLUMN_NOM + " ASC");
+        Cursor cursor = database.query(MedicamentDbHelper.TABLE_MEDICAMENTS,
+                allColumnsMedicament, null, null, null, null,
+                MedicamentDbHelper.COLUMN_NOM + " ASC");
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -170,16 +166,16 @@ public class MedicamentDAO {
         return medicaments;
     }
 
-    // Rechercher des médicaments par nom pour un utilisateur donné
-    public List<Medicament> searchMedicamentsByName(String query, long userId) {
+    // Rechercher des médicaments par nom
+    public List<Medicament> searchMedicamentsByName(String query) {
         List<Medicament> medicaments = new ArrayList<>();
 
-        Cursor cursor = database.query(AppDatabaseHelper.TABLE_MEDICAMENTS,
+        Cursor cursor = database.query(MedicamentDbHelper.TABLE_MEDICAMENTS,
                 allColumnsMedicament,
-                AppDatabaseHelper.COLUMN_MEDICAMENT_USER_ID + " = ? AND " + AppDatabaseHelper.COLUMN_NOM + " LIKE ?",
-                new String[]{String.valueOf(userId), "%" + query + "%"},
+                MedicamentDbHelper.COLUMN_NOM + " LIKE ?",
+                new String[]{"%" + query + "%"},
                 null, null,
-                AppDatabaseHelper.COLUMN_NOM + " ASC");
+                MedicamentDbHelper.COLUMN_NOM + " ASC");
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -214,9 +210,9 @@ public class MedicamentDAO {
     private List<String> getHeuresByMedicamentId(long medicamentId) {
         List<String> heures = new ArrayList<>();
 
-        Cursor cursor = database.query(AppDatabaseHelper.TABLE_ALARMES,
-                new String[]{AppDatabaseHelper.COLUMN_HEURE},
-                AppDatabaseHelper.COLUMN_MEDICAMENT_ID + " = ?",
+        Cursor cursor = database.query(MedicamentDbHelper.TABLE_ALARMES,
+                new String[]{MedicamentDbHelper.COLUMN_HEURE},
+                MedicamentDbHelper.COLUMN_MEDICAMENT_ID + " = ?",
                 new String[]{String.valueOf(medicamentId)},
                 null, null, null);
 
@@ -233,9 +229,9 @@ public class MedicamentDAO {
     private List<String> getJoursByMedicamentId(long medicamentId) {
         List<String> jours = new ArrayList<>();
 
-        Cursor cursor = database.query(AppDatabaseHelper.TABLE_JOURS,
-                new String[]{AppDatabaseHelper.COLUMN_JOUR},
-                AppDatabaseHelper.COLUMN_MEDICAMENT_ID + " = ?",
+        Cursor cursor = database.query(MedicamentDbHelper.TABLE_JOURS,
+                new String[]{MedicamentDbHelper.COLUMN_JOUR},
+                MedicamentDbHelper.COLUMN_MEDICAMENT_ID + " = ?",
                 new String[]{String.valueOf(medicamentId)},
                 null, null, null);
 

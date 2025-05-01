@@ -15,4 +15,11 @@
     <color name="selector_nav_item">#007BFF</color>
     <color name="teal_700">#007BFF</color>
 
+        <color name="colorAccent">#2196F3</color>
+        <color name="textColor">#212121</color>
+        <color name="textColorSecondary">#757575</color>
+        <color name="dividerColor">#BDBDBD</color>
+        <color name="userMessageBackground">#4CAF50</color>
+        <color name="botMessageBackground">#FFFFFF</color>
+
 </resources>

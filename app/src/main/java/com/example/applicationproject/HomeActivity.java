@@ -13,25 +13,28 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
 import account.ProfileActivity;
-import database.AppDatabaseHelper; // Remplacez l'ancien import
+import database.AppDatabaseHelper;
 import login.LoginActivity;
 import services.Appointement.ApptsActivity;
 import services.Medicaments.medicament_activity;
 import services.contacts.ContactsActivity;
 import services.prescriptions.PrescriptionsActivity;
+import com.example.applicationproject.chatbot.ChatbotActivity; // Import pour le chatbot
 
 public class HomeActivity extends AppCompatActivity {
 
     private TextView helloText, dateText;
     private String username = "User";
-    private int userId = -1; // Ajout d'un identifiant utilisateur
+    private int userId = -1;
     private ImageView accountIcon;
+    private FloatingActionButton chatFab; // Ajout du bouton flottant
     private SharedPreferences sharedPreferences;
     private static final String PREFS_NAME = "LoginPrefs";
 
@@ -41,6 +44,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         accountIcon = findViewById(R.id.accountIcon);
+        chatFab = findViewById(R.id.chatFab); // Récupération du bouton flottant du layout
         sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
         helloText = findViewById(R.id.helloText);
@@ -84,6 +88,14 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        // Configuration du bouton flottant pour le chatbot
+        chatFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openChatbot();
+            }
+        });
+
         // Navigation
         BottomNavigationView nav = findViewById(R.id.bottom_navigation);
         nav.setOnItemSelectedListener(item -> {
@@ -107,6 +119,12 @@ public class HomeActivity extends AppCompatActivity {
             }
             return false;
         });
+    }
+
+    // Méthode pour ouvrir l'activité Chatbot
+    private void openChatbot() {
+        Intent intent = new Intent(HomeActivity.this, ChatbotActivity.class);
+        startActivity(intent);
     }
 
     private void showPopupMenu(View view) {
